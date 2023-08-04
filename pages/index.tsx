@@ -2,11 +2,11 @@ import { ConnectWallet } from "@thirdweb-dev/react";
 import { useWeb3 } from "@3rdweb/hooks";
 import Image from "next/image";
 import axios from "axios";
-import metamaskIcon from './img/metamaskIcon.png'
+import metamaskIcon from "./img/metamaskIcon.png";
 
 // components
 import Menu from "./components/Menu";
-import Welcome from "./components/Welcome";
+import Survey from "./survey";
 
 export default function Home() {
     const { address, chainId, connectWallet } = useWeb3();
@@ -16,8 +16,9 @@ export default function Home() {
             <div>
                 <Menu />
 
-                <Welcome />
-
+                <div className="flex flex-col justify-center">
+                    <Survey />
+                </div>
                 {/* <p>Adress: {address}</p>
                 <p>ChainId: {chainId} </p> */}
             </div>

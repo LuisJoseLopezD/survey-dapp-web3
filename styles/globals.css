@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.sv-action-bar.sv-action-bar--default-size-mode.sv-footer.sv-body__footer.sv-clearfix {
+    display: flex;
+    justify-content: center;
+    margin-top: -15px;
+}

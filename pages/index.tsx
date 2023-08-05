@@ -1,9 +1,11 @@
-import { ConnectWallet } from "@thirdweb-dev/react";
-import { useWeb3 } from "@3rdweb/hooks";
 import Image from "next/image";
 import axios from "axios";
 import metamaskIcon from "./img/metamaskIcon.png";
 import Swal from 'sweetalert2';
+
+// wallet
+import { useConnect, useAddress } from "@thirdweb-dev/react";
+import { metamaskWallet } from "@thirdweb-dev/react";
 
 // components
 import Menu from "./components/Menu";
@@ -11,7 +13,9 @@ import Survey from "./survey";
 
 export default function Home() {
 
-    const { address, chainId, connectWallet } = useWeb3();
+    const metamaskConfig = metamaskWallet();
+    const connect = useConnect();
+    const address = useAddress();
 
     async function Login() {
         if (!window.ethereum) {
@@ -27,7 +31,7 @@ export default function Home() {
             //alert('MetaMask not detected. Please install MetaMask first.');
             return;
         } else {
-            connectWallet("injected");
+            await connect(metamaskConfig);
         }
     };
 

@@ -3,13 +3,33 @@ import { useWeb3 } from "@3rdweb/hooks";
 import Image from "next/image";
 import axios from "axios";
 import metamaskIcon from "./img/metamaskIcon.png";
+import Swal from 'sweetalert2';
 
 // components
 import Menu from "./components/Menu";
 import Survey from "./survey";
 
 export default function Home() {
+
     const { address, chainId, connectWallet } = useWeb3();
+
+    async function Login() {
+        if (!window.ethereum) {
+            Swal.fire({
+                title: "You don't have Metamask installed",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Install Metamask'
+            }).then((result) => {
+                window.open('https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn', '_blank');
+                //}
+            })
+            //alert('MetaMask not detected. Please install MetaMask first.');
+            return;
+        } else {
+            connectWallet("injected");
+        }
+    };
 
     if (address) {
         return (
@@ -37,11 +57,9 @@ export default function Home() {
                                     Sign in to your account
                                 </h1>
                                 <div
-                                    onClick={() => {
-                                        connectWallet("injected");
-                                    }}
+                                    onClick={Login}
                                     style={{ background: "orange" }}
-                                    className="rounded w-64 flex row justify-center"
+                                    className="cursor-pointer rounded w-64 flex row justify-center"
                                 >
                                     <Image
                                         src={metamaskIcon}

@@ -4,8 +4,9 @@ export const questions = {
     showPrevButton: false,
     firstPageIsStarted: true,
     startSurveyText: "START",
-    showTimerPanel: "top",
+    showTimerPanel: "bottom",
     maxTimeToFinishPage: 10,
+    showCompletedPage: false,
     pages: [
         {
             elements: [
@@ -20,8 +21,8 @@ export const questions = {
             elements: [
                 {
                     type: "checkbox",
-                    name: "Question1",
-                    title: "Question1",
+                    name: "Question 1",
+                    title: "Question 1",
                     // isRequired: true,
                     choices: ["Option 1", "Option 2", "Option 3"],
                     correctAnswer: "Option 1",
@@ -33,8 +34,8 @@ export const questions = {
             elements: [
                 {
                     type: "checkbox",
-                    name: "Question2",
-                    title: "Question2",
+                    name: "Question 2",
+                    title: "Question 2",
                     // isRequired: true,
                     choices: ["Option 1", "Option 2", "Option 3"],
                     correctAnswer: "Option 1",
@@ -42,5 +43,6 @@ export const questions = {
             ],
         },
     ],
-    completedHtml: "<h4 style='margin-top: 10px'>You got <b>{correctAnswers}</b> out of <b>{questionCount}</b> correct answers</h4>",
 };
+
+//  completedHtml: "<h4 style='margin-top: 10px'>You got <b>{correctAnswers}</b> out of <b>{questionCount}</b> correct answers</h4>",

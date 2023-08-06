@@ -1,7 +1,5 @@
-import React from "react";
 import { useState } from "react";
 import { useDisconnect } from "@thirdweb-dev/react";
-import { useSwitchChain } from "@thirdweb-dev/react";
 import { Goerli } from "@thirdweb-dev/chains";
 
 import { useEffect } from "react";
@@ -9,12 +7,11 @@ import {
     ChainId,
     useNetworkMismatch,
     useNetwork,
-    useChainId,
-    ConnectWallet,
     useAddress
   } from "@thirdweb-dev/react";
 
-const Menu = () => {
+
+export default function Menu () {
 
     const address = useAddress(); // Get connected wallet address
     const [, switchNetwork] = useNetwork(); // Switch to desired chain
@@ -35,7 +32,7 @@ const Menu = () => {
       }, [address]);
 
     return (
-        <div>
+        <header>
             <nav className="bg-emerald-400">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <a href="#" className="flex items-center">
@@ -76,6 +73,8 @@ const Menu = () => {
                         }
                         id="navbar-solid-bg"
                     >
+
+                        {address?
                         <ul className="flex flex-row items-center font-medium mt-4 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
                             <li>
                                 <a
@@ -104,11 +103,12 @@ const Menu = () => {
                                 </button>
                             </li>
                         </ul>
+                        :
+                        ''
+                        }
                     </div>
                 </div>
             </nav>
-        </div>
+        </header>
     );
 };
-
-export default Menu;

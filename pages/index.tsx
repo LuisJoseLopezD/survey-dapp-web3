@@ -1,34 +1,27 @@
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import metamaskIcon from "./img/metamaskIcon.png";
 import Swal from 'sweetalert2';
 
 // wallet
-import { useConnect, useAddress } from "@thirdweb-dev/react";
+import { useConnect, useAddress, useContract } from "@thirdweb-dev/react";
 import { metamaskWallet } from "@thirdweb-dev/react";
 
 // components
 import Survey from "./survey";
 
-//survey
-// import { Model } from "survey-core";
-// import { useEffect } from "react";
-
 export default function Home() {
-
-    // //survey
-    // const surveyJson = { ...Model};
-    // const survey = new Model(surveyJson);
-
-    // useEffect(() => {
-    //     console.log(survey.data);
-    // }, []);
 
     // wallet
     const metamaskConfig = metamaskWallet();
     const connect = useConnect();
     const address = useAddress();
-
+    
+    //contract
+    const contractAdress = "0x437eF217203452317C3C955Cf282b1eE5F6aaF72";
+    const { contract, error } = useContract(contractAdress);
+    
     async function Login() {
         if (!window.ethereum) {
             Swal.fire({

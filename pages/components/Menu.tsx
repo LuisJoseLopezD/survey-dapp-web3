@@ -10,16 +10,19 @@ import {
     useAddress
 } from "@thirdweb-dev/react";
 
-//contract 
-import { ethers } from "ethers";
-import { stringify } from "querystring";
+interface dataBalance {
+    balance:string, 
+    symbol: string
+}
 
 export default function Menu() {
+
+    const [burger, setBurger] = useState(true);
 
     //contract
     const tokenAddress = "0x437eF217203452317C3C955Cf282b1eE5F6aaF72";
     const { data, isLoading } = useBalance(tokenAddress);
-    const [dataBalance, setDataBalance] = useState<{balance: string; symbol: string}>({
+    const [dataBalance, setDataBalance] = useState<dataBalance>({
         balance: "",
         symbol: "",
     });
@@ -30,10 +33,8 @@ export default function Menu() {
     const isMismatched = useNetworkMismatch(); // Detect if user is connected to the wrong network
     const disconnect = useDisconnect();
 
-    const [loading, setLoading] = useState(true);
-    const [burger, setBurger] = useState(true);
 
-    const showandhide = () => {
+    const showandhide = (burger: Boolean = true):void => {
         setBurger(!burger);
     };
 
@@ -60,7 +61,7 @@ export default function Menu() {
                         </span>
                     </a>
                     <button
-                        onClick={showandhide}
+                        onClick={()=>showandhide()}
                         data-collapse-toggle="navbar-solid-bg"
                         type="button"
                         className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -99,7 +100,7 @@ export default function Menu() {
                                     <span
                                         className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-black-400 md:p-0 dark:text-white md:dark:hover:text-black-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                                     >
-                                        {dataBalance.symbol}: {dataBalance.balance}
+                                        {dataBalance.symbol} {dataBalance.balance}
                                     </span>
                                 </li>
 
@@ -117,7 +118,7 @@ export default function Menu() {
                                 </li>
                                 <li>
                                     <button className="my-1" onClick={disconnect}>
-                                        <svg className="h-8 w-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round">  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />  <line x1="9" y1="9" x2="15" y2="15" />  <line x1="15" y1="9" x2="9" y2="15" /></svg>
+                                        <svg className="h-8 w-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />  <line x1="9" y1="9" x2="15" y2="15" />  <line x1="15" y1="9" x2="9" y2="15" /></svg>
                                     </button>
                                 </li>
                             </ul>

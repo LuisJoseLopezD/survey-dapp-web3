@@ -38,7 +38,7 @@ export const questions = {
                     title: "Question 2",
                     // isRequired: true,
                     choices: ["Option 1", "Option 2", "Option 3"],
-                    correctAnswer: "Option 1",
+                    correctAnswer: "Option 2",
                 },
             ],
         },

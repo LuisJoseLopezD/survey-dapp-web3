@@ -12,7 +12,11 @@ import useStore from '../../store/store';
 
 const SurveyComponent = () => {
 
-    const router = useRouter()
+    const surveyResult = useStore((state) => state.surveyResult);
+    let answers = useStore((state) => state.answers);
+
+    const router = useRouter();
+    const SURVEY_ID = {id: "1"};
 
     // Apply theme
     Survey.StylesManager.applyTheme("modern")
@@ -21,26 +25,26 @@ const SurveyComponent = () => {
     const survey = new Survey.Model(questions)
 
     survey.onComplete.add((survey) => {
-        const resultData = [];
+        // const resultData = [];
         for (const key in survey.data) {
-          const question = survey.getQuestionByName(key);
-          if (!!question) {
-            const item = {
-              name: key,
-              value: question.value,
-              title: question.displayValue,
-              displayValue: question.displayValue,
-              correctAnswer: question.correctAnswer
-            };
-            resultData.push(item);
-          }
-        }
-        // ...
-        useStore.setState({ surveyResult: resultData });
+            const question = survey.getQuestionByName(key);
+            if (!!question) {
+                const item = {
+                    name: key,
+                    value: question.value,
+                    title: question.displayValue,
+                    displayValue: question.displayValue,
+                    correctAnswer: question.correctAnswer
+                };
+                surveyResult.push(item);
+            }
+        }    
+        surveyResult.push(SURVEY_ID);
         router.push('/rewards');
-        console.log(resultData);
+        console.log(surveyResult);
         // ...
-      });
+    });
+
 
     // Render the survey
     return (

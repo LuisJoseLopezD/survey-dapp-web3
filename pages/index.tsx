@@ -18,11 +18,7 @@ export default function Home() {
     const connect = useConnect();
     const address = useAddress();
     
-    //contract
-    const contractAdress = "0x437eF217203452317C3C955Cf282b1eE5F6aaF72";
-    const { contract, error } = useContract(contractAdress);
-    
-    async function Login() {
+    async function Login():Promise<void> {
         if (!window.ethereum) {
             Swal.fire({
                 title: "You don't have Metamask installed",
@@ -33,7 +29,6 @@ export default function Home() {
                 window.open('https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn', '_blank');
                 //}
             })
-            //alert('MetaMask not detected. Please install MetaMask first.');
             return;
         } else {
             await connect(metamaskConfig);

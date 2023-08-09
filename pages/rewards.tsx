@@ -2,12 +2,15 @@ import { useEffect } from 'react';
 import { ethers } from "ethers";
 import web3 from 'web3';
 import ABI from './helpers/ABI.json';
+import { useRouter } from 'next/router'
 
 //state
 import useStore from './store/store';
 import { useFrameWallet } from '@thirdweb-dev/react';
 
 export default function Rewards() {
+
+    const router = useRouter();
 
     //contract
     const { ethers } = require("ethers");
@@ -33,11 +36,18 @@ export default function Rewards() {
     // The Contract object
     const contract = new ethers.Contract(contractAddress, ABI, signer);
 
-    const handleSubmitReward = async () => {
-        // const handleReward = await contract.submit(formattedFilteredId, ids.flat());
-        const handleReward = await contract.submit(formattedFilteredId, filteredAnswersId);
-        console.log(handleReward);
+    async function handleSubmitReward() {
+        const handleSubmit = await contract.submit(formattedFilteredId, filteredAnswersId)
+            .then((result) => {
+                router.push('/waiting');
+                console.log(handleSubmit);
+            })
+            .catch((error) => {
+                console.log(error);
+                console.log("transaction error...");
+            });
     }
+
 
     return (
         <>
@@ -86,10 +96,11 @@ export default function Rewards() {
                                                     </td>
                                                     <td
                                                         className="whitespace-nowrap border-r px-6 py-4 dark:border-neutral-500">
-                                                        {item.correctAnswer[0] === item.displayValue ?
-                                                            "✅"
-                                                            :
-                                                            "❌"
+                                                        {
+                                                            item.correctAnswer[0] === item.displayValue ?
+                                                                "✅"
+                                                                :
+                                                                "❌"
                                                         }
 
                                                     </td>

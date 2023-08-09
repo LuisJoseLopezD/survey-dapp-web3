@@ -13,7 +13,6 @@ import useStore from '../../store/store';
 const SurveyComponent = () => {
 
     const surveyResult = useStore((state) => state.surveyResult);
-    let answers = useStore((state) => state.answers);
 
     const router = useRouter();
     const SURVEY_ID = {id: "1"};

@@ -1,24 +1,53 @@
-import { useEffect, useState } from "react";
+import { redirect } from "react-router-dom";
+import {useState } from "react";
 import Image from "next/image";
-import axios from "axios";
+import { useRouter } from 'next/router'
 import metamaskIcon from "./img/metamaskIcon.png";
 import Swal from 'sweetalert2';
+import { ethers } from "ethers";
 
-// wallet
-import { useConnect, useAddress, useContract } from "@thirdweb-dev/react";
+import { useConnect, useAddress } from "@thirdweb-dev/react";
 import { metamaskWallet } from "@thirdweb-dev/react";
 
 // components
 import Survey from "./survey";
 
+//state
+import useStore from './store/store';
+
 export default function Home() {
+
+    const router = useRouter();
+    const connected = useStore((state) => state.connected);
 
     // wallet
     const metamaskConfig = metamaskWallet();
     const connect = useConnect();
     const address = useAddress();
-    
-    async function Login():Promise<void> {
+
+    async function getWallet() {
+        const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+        let accounts = await provider.send("eth_requestAccounts", []);
+        let account = accounts[0];
+        const signer = provider.getSigner();
+        const wallet = await signer.getAddress();
+        useStore.setState({ connected: true });
+        router.push('/survey');
+    }
+
+    async function connectToApp() {
+        await connect(metamaskConfig)
+            .then((result) => {
+                getWallet();
+                console.log("connected to app...");
+            })
+            .catch((error) => {
+                console.log(error);
+                console.log("loggin error...");
+            });
+    }
+
+    async function Login() {
         if (!window.ethereum) {
             Swal.fire({
                 title: "You don't have Metamask installed",
@@ -31,11 +60,11 @@ export default function Home() {
             })
             return;
         } else {
-            await connect(metamaskConfig);
+            await connectToApp();
         }
     };
 
-    if (address) {
+    if (connected) {
         return (
             <>
                 <Survey />

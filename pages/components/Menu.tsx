@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useDisconnect, useBalance } from "@thirdweb-dev/react";
 import { Goerli } from "@thirdweb-dev/chains";
+import { useRouter } from 'next/router';
+
+//state
+import useStore from '../store/store';
 
 import { useEffect } from "react";
 import {
@@ -9,6 +13,7 @@ import {
     useNetwork,
     useAddress
 } from "@thirdweb-dev/react";
+import { useFetcher } from "react-router-dom";
 
 interface dataBalance {
     balance:string, 
@@ -17,6 +22,8 @@ interface dataBalance {
 
 export default function Menu() {
 
+    const connected = useStore((state) => state.connected);
+    const router = useRouter();
     const [burger, setBurger] = useState(true);
 
     //contract
@@ -33,10 +40,15 @@ export default function Menu() {
     const isMismatched = useNetworkMismatch(); // Detect if user is connected to the wrong network
     const disconnect = useDisconnect();
 
-
     const showandhide = (burger: Boolean = true):void => {
         setBurger(!burger);
     };
+
+    async function logOut () {
+        useStore.setState({ connected: false });
+        router.push('/');
+        disconnect();
+    }
 
     useEffect(() => {
         if (data) {
@@ -117,7 +129,7 @@ export default function Menu() {
                                     </button>
                                 </li>
                                 <li>
-                                    <button className="my-1" onClick={disconnect}>
+                                    <button className="my-1" onClick={logOut}>
                                         <svg className="h-8 w-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />  <line x1="9" y1="9" x2="15" y2="15" />  <line x1="15" y1="9" x2="9" y2="15" /></svg>
                                     </button>
                                 </li>

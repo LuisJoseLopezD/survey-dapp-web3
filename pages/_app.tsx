@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import React, { useEffect } from "react";
-import {DataProvider} from './context/DataContext';
+import {DataProvider} from './context/DataContext.js';
 
 //layout
 import Layout from './components/Layout'

@@ -2,13 +2,13 @@ import { useContext, useEffect, useState } from 'react';
 import Menu from './Menu';
 
 import { useRouter } from 'next/router';
-import { DataContext } from '../context/DataContext';
+import { DataContext } from '../context/DataContext.js';
 
-export default function Layout({ children }) {
+export default function Layout({ children }: any) {
     const router = useRouter();
     const { surveyDone } = useContext(DataContext);
 
-    function getCookie(key) {
+    function getCookie(key:string) {
         var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
         return b ? b.pop() : "";
     }

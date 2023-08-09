@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import dynamic from "next/dynamic";
 
 //state
-import { DataContext } from './context/DataContext';
+import { DataContext } from './context/DataContext.js';
 
 function Rewards() {
 
@@ -50,11 +50,11 @@ function Rewards() {
 
     async function handleSubmitReward() {
         await contract.submit(formattedFilteredId, filteredAnswersId)
-            .then((result) => {
+            .then((result:object) => {
                 setSurveyDone("YES");
                 router.push('/waiting');
             })
-            .catch((error) => {
+            .catch((error:any) => {
                 console.log(error);
                 console.log("transaction error...");
             });

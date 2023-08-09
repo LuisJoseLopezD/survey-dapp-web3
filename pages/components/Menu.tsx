@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { useDisconnect, useBalance } from "@thirdweb-dev/react";
+import { useDisconnect, useBalance, useSwitchChain } from "@thirdweb-dev/react";
 import { Goerli } from "@thirdweb-dev/chains";
 import { useRouter } from 'next/router';
 
@@ -11,33 +11,18 @@ import {
     useAddress
 } from "@thirdweb-dev/react";
 import { useFetcher } from "react-router-dom";
-import { DataContext } from "../context/DataContext";
+import { DataContext } from "../context/DataContext.js";
 
 interface dataBalance {
-    balance:string, 
+    balance: string,
     symbol: string
 }
 
 export default function Menu() {
 
-    function eraseCookie(name:any) {   
-        document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    }
-
-    function getCookie(key:any) {
-        var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
-        return b ? b.pop() : "";
-      } 
-
-    const {connected, setConnected} = useContext(DataContext);
+    const { connected, setConnected } = useContext(DataContext);
     const router = useRouter();
     const [burger, setBurger] = useState(true);
-
-    useEffect(() => {
-        if(getCookie("survey")){
-            setConnected(true);
-        }
-      }, []); 
 
     //contract
     const tokenAddress = "0x437eF217203452317C3C955Cf282b1eE5F6aaF72";
@@ -49,15 +34,30 @@ export default function Menu() {
 
     //wallet
     const address = useAddress(); // Get connected wallet address
-    const [, switchNetwork] = useNetwork(); // Switch to desired chain
+    const switchNetwork = useSwitchChain(); // Switch to desired chain
     const isMismatched = useNetworkMismatch(); // Detect if user is connected to the wrong network
     const disconnect = useDisconnect();
 
-    const showandhide = (burger: Boolean = true):void => {
+    function eraseCookie(name: any) {
+        document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
+
+    function getCookie(key: any) {
+        var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+        return b ? b.pop() : "";
+    }
+
+    useEffect(() => {
+        if (getCookie("survey")) {
+            setConnected(true);
+        }
+    }, []);
+
+    const showandhide = (burger: Boolean = true): void => {
         setBurger(!burger);
     };
 
-    async function logOut () {
+    async function logOut() {
         eraseCookie("connected");
         setConnected(false);
         disconnect();
@@ -87,7 +87,7 @@ export default function Menu() {
                         </span>
                     </a>
                     <button
-                        onClick={()=>showandhide()}
+                        onClick={() => showandhide()}
                         data-collapse-toggle="navbar-solid-bg"
                         type="button"
                         className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"

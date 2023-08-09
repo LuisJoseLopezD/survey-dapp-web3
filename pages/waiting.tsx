@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { DataContext } from './context/DataContext';
+import { DataContext } from './context/DataContext.js';
 import dynamic from "next/dynamic";
 
 const Waiting = () => {

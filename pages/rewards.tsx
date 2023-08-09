@@ -2,12 +2,13 @@ import { useContext, useEffect } from 'react';
 import { ethers } from "ethers";
 import web3 from 'web3';
 import ABI from './helpers/ABI.json';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
+import dynamic from "next/dynamic";
 
 //state
 import { DataContext } from './context/DataContext';
 
-export default function Rewards() {
+function Rewards() {
 
     const router = useRouter();
     
@@ -22,7 +23,7 @@ export default function Rewards() {
     const { surveyResult } = useContext( DataContext );
     //id
     let filteredId = surveyResult.filter((result: any) => result.id);
-    let formattedFilteredId = parseInt(filteredId[0].id);
+    let formattedFilteredId = filteredId[0]?.id ? parseInt(filteredId[0].id) : null;
     //answers
     let filteredAnswers = surveyResult.filter((result: any) => result.correctAnswer);
     let ids: Array<String> = [];
@@ -60,6 +61,7 @@ export default function Rewards() {
     }
 
     useEffect(() => {
+        setSurveyDone(surveyDone);
         setCookie("survey", surveyDone, 30);
     }, [surveyDone]);
 
@@ -144,3 +146,7 @@ export default function Rewards() {
         </>
     )
 }
+
+export default dynamic(() => Promise.resolve(Rewards), {
+    ssr: false,
+  });

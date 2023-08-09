@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import React from "react";
+import React, { useEffect } from "react";
 import {DataProvider} from './context/DataContext';
 
 //layout
@@ -9,8 +9,11 @@ import Layout from './components/Layout'
 //wallet
 import { ThirdwebProvider } from "@thirdweb-dev/react";
 import { metamaskWallet } from "@thirdweb-dev/react";
+import { useRouter } from "next/router";
 
 function App({ Component, pageProps }: AppProps) {
+
+    const router = useRouter();
 
     //wallet
     const metamaskConfig = metamaskWallet();

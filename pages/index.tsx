@@ -1,4 +1,5 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
+// import { Route, Redirect, BrowserRouter, Routes } from 'react-router-dom';
 import Image from "next/image";
 import { useRouter } from 'next/router'
 import metamaskIcon from "./img/metamaskIcon.png";
@@ -10,7 +11,7 @@ import { metamaskWallet } from "@thirdweb-dev/react";
 
 // components
 import Survey from "./survey";
-import Waiting from "./waiting";
+import Menu from "./components/Menu";
 
 //state
 import { DataContext } from "./context/DataContext";
@@ -19,12 +20,23 @@ export default function Home() {
 
     const router = useRouter();
     const { connected, setConnected } = useContext(DataContext);
-    const { surveyDone } = useContext(DataContext);
+    const { surveyDone, setSurveyDone } = useContext(DataContext);
 
     // wallet
     const metamaskConfig = metamaskWallet();
     const connect = useConnect();
     const address = useAddress();
+
+    //setCookie
+    function setCookie(name: string, value: any, days: any) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
 
     async function getWallet() {
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
@@ -32,7 +44,9 @@ export default function Home() {
         let account = accounts[0];
         const signer = provider.getSigner();
         const wallet = await signer.getAddress();
-        setConnected(true);
+        setConnected("YES");
+        setCookie("connected", connected, 30);
+        setCookie("survey", surveyDone, 30);
         console.log(connected);
         router.push('/survey');
     }

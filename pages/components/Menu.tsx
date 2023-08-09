@@ -20,9 +20,24 @@ interface dataBalance {
 
 export default function Menu() {
 
+    function eraseCookie(name:any) {   
+        document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
+
+    function getCookie(key:any) {
+        var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+        return b ? b.pop() : "";
+      } 
+
     const {connected, setConnected} = useContext(DataContext);
     const router = useRouter();
     const [burger, setBurger] = useState(true);
+
+    useEffect(() => {
+        if(getCookie("survey")){
+            setConnected(true);
+        }
+      }, []); 
 
     //contract
     const tokenAddress = "0x437eF217203452317C3C955Cf282b1eE5F6aaF72";
@@ -43,9 +58,10 @@ export default function Menu() {
     };
 
     async function logOut () {
+        eraseCookie("connected");
         setConnected(false);
-        router.push('/survey');
         disconnect();
+        router.push('/');
     }
 
     useEffect(() => {
@@ -104,7 +120,7 @@ export default function Menu() {
                         id="navbar-solid-bg"
                     >
 
-                        {address ?
+                        {connected ?
                             <ul className="flex flex-row items-center font-medium mt-4 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
                                 <li>
                                     <span

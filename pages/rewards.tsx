@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import dynamic from "next/dynamic";
 
 //state
-import { DataContext } from './context/DataContext.js';
+import { useDataContext } from "./context/DataContext";
 
 function Rewards() {
 
@@ -16,11 +16,11 @@ function Rewards() {
     const { ethers } = require("ethers");
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner()
-    const {contractAddress} = useContext(DataContext);
+    const {contractAddress} = useDataContext();
 
     //survey
-    const {surveyDone, setSurveyDone} = useContext(DataContext);
-    const { surveyResult } = useContext( DataContext );
+    const {surveyDone, setSurveyDone} = useDataContext();
+    const { surveyResult } = useDataContext();
     //id
     let filteredId = surveyResult.filter((result: any) => result.id);
     let formattedFilteredId = filteredId[0]?.id ? parseInt(filteredId[0].id) : null;
@@ -56,7 +56,7 @@ function Rewards() {
             })
             .catch((error:any) => {
                 console.log(error);
-                console.log("transaction error...");
+                console.log("transaction reject...");
             });
     }
 

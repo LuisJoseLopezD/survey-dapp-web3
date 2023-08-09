@@ -11,7 +11,9 @@ import {
     useAddress
 } from "@thirdweb-dev/react";
 import { useFetcher } from "react-router-dom";
-import { DataContext } from "../context/DataContext.js";
+
+//state
+import { useDataContext } from "../context/DataContext";
 
 interface dataBalance {
     balance: string,
@@ -20,7 +22,7 @@ interface dataBalance {
 
 export default function Menu() {
 
-    const { connected, setConnected } = useContext(DataContext);
+    const { connected, setConnected } = useDataContext();
     const router = useRouter();
     const [burger, setBurger] = useState(true);
 
@@ -71,10 +73,20 @@ export default function Menu() {
         }
     }, [data]);
 
-    useEffect(() => {
+    const changeNetwork = async () => {
         if (isMismatched) {
-            switchNetwork(ChainId.Goerli);
+            await switchNetwork(ChainId.Goerli)
+                .then((result) => {
+                    console.log("changed sucessfully...");
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
+    }
+
+    useEffect(() => {
+        changeNetwork();
     }, [address]);
 
     return (
@@ -137,7 +149,7 @@ export default function Menu() {
                                             :
                                             "bg-blue-400 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
                                         }
-                                        onClick={() => switchNetwork(ChainId.Goerli)}
+                                        onClick={changeNetwork}
                                         disabled={isMismatched ? false : true} >
                                         <span> {isMismatched ? "connect to goerli" : "Goerli connected"} </span>
                                     </button>

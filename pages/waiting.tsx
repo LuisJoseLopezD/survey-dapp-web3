@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { DataContext } from './context/DataContext.js';
+import { useDataContext } from './context/DataContext';
 import dynamic from "next/dynamic";
 
 const Waiting = () => {
 
     const router = useRouter();
-    const { surveyDone, setSurveyDone } = useContext(DataContext);
+    const { surveyDone, setSurveyDone } = useDataContext();
 
     const storedTime = typeof window !== 'undefined' ? localStorage.getItem("time") : null;
     const parsedTime = storedTime ? JSON.parse(storedTime) : { minutes: 5, seconds: 0 };

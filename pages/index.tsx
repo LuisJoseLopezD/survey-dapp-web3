@@ -14,13 +14,14 @@ import Survey from "./survey";
 import Menu from "./components/Menu";
 
 //state
-import { DataContext } from "./context/DataContext";
+import { useDataContext } from "./context/DataContext";
 
 export default function Home() {
 
     const router = useRouter();
-    const { connected, setConnected } = useContext(DataContext);
-    const { surveyDone, setSurveyDone } = useContext(DataContext);
+
+    const { connected, setConnected } = useDataContext();
+    const { surveyDone, setSurveyDone } = useDataContext();
 
     // wallet
     const metamaskConfig = metamaskWallet();
@@ -44,7 +45,7 @@ export default function Home() {
         let account = accounts[0];
         const signer = provider.getSigner();
         const wallet = await signer.getAddress();
-        setConnected("YES");
+        setConnected(true);
         setCookie("connected", connected, 30);
         setCookie("survey", surveyDone, 30);
         console.log(connected);

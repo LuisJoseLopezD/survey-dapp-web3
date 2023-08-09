@@ -1,25 +1,25 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { ethers } from "ethers";
 import web3 from 'web3';
 import ABI from './helpers/ABI.json';
 import { useRouter } from 'next/router'
 
 //state
-import useStore from './store/store';
-import { useFrameWallet } from '@thirdweb-dev/react';
+import { DataContext } from './context/DataContext';
 
 export default function Rewards() {
 
     const router = useRouter();
-
+    
     //contract
     const { ethers } = require("ethers");
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner()
-    const contractAddress = useStore((state) => state.contractAddress);
+    const {contractAddress} = useContext(DataContext);
 
     //survey
-    const surveyResult = useStore((state) => state.surveyResult);
+    const {surveyDone, setSurveyDone} = useContext(DataContext);
+    const { surveyResult } = useContext( DataContext );
     //id
     let filteredId = surveyResult.filter((result: any) => result.id);
     let formattedFilteredId = parseInt(filteredId[0].id);
@@ -30,17 +30,28 @@ export default function Rewards() {
         .map((item: any) => item.correctAnswer)
         .map((id: any) => id.toString().replace(/\D/g, ''));
 
-    console.log(formattedFilteredId);
-    console.log(filteredAnswersId);
+    // console.log(formattedFilteredId);
+    // console.log(filteredAnswersId);
+
+    //setCookie
+    function setCookie(name:string,value:any,days:any) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
 
     // The Contract object
     const contract = new ethers.Contract(contractAddress, ABI, signer);
 
     async function handleSubmitReward() {
-        const handleSubmit = await contract.submit(formattedFilteredId, filteredAnswersId)
+        await contract.submit(formattedFilteredId, filteredAnswersId)
             .then((result) => {
+                setSurveyDone("YES");
                 router.push('/waiting');
-                console.log(handleSubmit);
             })
             .catch((error) => {
                 console.log(error);
@@ -48,6 +59,9 @@ export default function Rewards() {
             });
     }
 
+    useEffect(() => {
+        setCookie("survey", surveyDone, 30);
+    }, [surveyDone]);
 
     return (
         <>
@@ -122,9 +136,7 @@ export default function Rewards() {
                     ''
                     :
                     <button
-                        onClick={() => {
-                            handleSubmitReward()
-                        }}
+                        onClick={handleSubmitReward}
                         className="bg-yellow-500 my-4 w-48 mx-auto hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded">
                         Claim Rewards
                     </button>

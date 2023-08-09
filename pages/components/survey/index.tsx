@@ -1,18 +1,18 @@
 // components/survey/index.tsx
-import React from "react"
+import {useContext } from "react"
 import * as Survey from "survey-react" // import surveyjs
 import { questions } from "./content" // these are the survey questions
 import { useRouter } from 'next/router'
+import { DataContext } from "@/pages/context/DataContext"
 
 // Modern theme
 import "survey-react/modern.min.css"
 
-//state
-import useStore from '../../store/store';
-
 const SurveyComponent = () => {
 
-    const surveyResult = useStore((state) => state.surveyResult);
+    const { surveyResult } = useContext( DataContext );
+
+    // const surveyResult = useStore((state) => state.surveyResult);
 
     const router = useRouter();
     const SURVEY_ID = {id: "1"};

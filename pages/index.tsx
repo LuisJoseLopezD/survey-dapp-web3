@@ -1,5 +1,4 @@
-import { redirect } from "react-router-dom";
-import {useState } from "react";
+import { useContext, useState } from "react";
 import Image from "next/image";
 import { useRouter } from 'next/router'
 import metamaskIcon from "./img/metamaskIcon.png";
@@ -11,14 +10,16 @@ import { metamaskWallet } from "@thirdweb-dev/react";
 
 // components
 import Survey from "./survey";
+import Waiting from "./waiting";
 
 //state
-import useStore from './store/store';
+import { DataContext } from "./context/DataContext";
 
 export default function Home() {
 
     const router = useRouter();
-    const connected = useStore((state) => state.connected);
+    const { connected, setConnected } = useContext(DataContext);
+    const { surveyDone } = useContext(DataContext);
 
     // wallet
     const metamaskConfig = metamaskWallet();
@@ -31,7 +32,8 @@ export default function Home() {
         let account = accounts[0];
         const signer = provider.getSigner();
         const wallet = await signer.getAddress();
-        useStore.setState({ connected: true });
+        setConnected(true);
+        console.log(connected);
         router.push('/survey');
     }
 

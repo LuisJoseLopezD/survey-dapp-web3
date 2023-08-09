@@ -1,5 +1,7 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
+import React from "react";
+import {DataProvider} from './context/DataContext';
 
 //layout
 import Layout from './components/Layout'
@@ -16,11 +18,12 @@ function App({ Component, pageProps }: AppProps) {
 
     return (
         <ThirdwebProvider activeChain={activeChain} supportedWallets={[metamaskWallet()]}>
-            <Layout>
-                <Component {...pageProps} />
-            </Layout>
+            <DataProvider>
+                <Layout>
+                    <Component {...pageProps} />
+                </Layout>
+            </DataProvider>
         </ThirdwebProvider>
     );
 }
-
 export default App;

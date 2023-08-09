@@ -1,10 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useDisconnect, useBalance } from "@thirdweb-dev/react";
 import { Goerli } from "@thirdweb-dev/chains";
 import { useRouter } from 'next/router';
-
-//state
-import useStore from '../store/store';
 
 import { useEffect } from "react";
 import {
@@ -14,6 +11,7 @@ import {
     useAddress
 } from "@thirdweb-dev/react";
 import { useFetcher } from "react-router-dom";
+import { DataContext } from "../context/DataContext";
 
 interface dataBalance {
     balance:string, 
@@ -22,7 +20,7 @@ interface dataBalance {
 
 export default function Menu() {
 
-    const connected = useStore((state) => state.connected);
+    const {connected, setConnected} = useContext(DataContext);
     const router = useRouter();
     const [burger, setBurger] = useState(true);
 
@@ -45,8 +43,8 @@ export default function Menu() {
     };
 
     async function logOut () {
-        useStore.setState({ connected: false });
-        router.push('/');
+        setConnected(false);
+        router.push('/survey');
         disconnect();
     }
 
